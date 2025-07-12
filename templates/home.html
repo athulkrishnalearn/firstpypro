@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Dream Journal</title>
+    <style>
+
+      body {
+        font-family: Arial, sans-serif;
+        background: #f0f8ff;
+        color: #333;
+        padding: 20px;
+      }
+      h1 {
+        color: #0066cc;
+      }
+      ul { list-style: none; padding: 0; }
+  li.error { color: red; }
+  li.success { color: green; }
+    </style>
+</head>
+<body>
+  <h1>Welcome to Your Dream Journal! 🌙</h1>
+  <p>Write your dreams and keep them safe here.</p>
+
+  <form method="POST" action="/submit">
+    <label for="dream">Your Dream:</label><br />
+    <textarea id="dream" name="dream" rows="4" cols="50" required></textarea><br />
+    <button type="submit">Save Dream</button>
+  </form>
+  <h2>Past Dreams:</h2>
+  <ul>
+    {% for dream in dreams %}
+      <li>
+        {{ dream['content'] }} 
+        <small>(saved on {{ dream['created_at'] }})</small>
+        <form method="POST" action="/delete/{{ dream['id'] }}" style="display:inline;">
+          <button type="submit" onclick="return confirm('Delete this dream?');">Delete</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+  
+
+</body>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul>
+      {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+</html>
